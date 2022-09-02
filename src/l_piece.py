@@ -4,7 +4,6 @@ import os
 class Piece:
     def __init__(self,defaultspawnpt,cropval,base_path,screen):
         self.position = defaultspawnpt
-        self.isHeld = False
         self.cropval = cropval
         self.pieces = pygame.image.load(os.path.join(base_path, "../images/Pieces.png"))
         self.size_factor = 0.7
