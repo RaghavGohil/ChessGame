@@ -1,9 +1,7 @@
-# pkg imports
 import os
 import pygame
 from pygame.locals import *
 
-# local imports
 import l_board
 import l_border
 import l_piece

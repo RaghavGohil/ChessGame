@@ -1,6 +1,8 @@
 import pygame
 import os
 
+import l_audio
+
 class Border:
     def __init__(self,base_path):
         self.border= pygame.image.load(os.path.join(base_path, "../images/Border.png"))
@@ -15,5 +17,7 @@ class Border:
                         self.position[0] = x*board.isps
                     if(mousepos[1] > y*board.isps):
                         self.position[1] = y*board.isps
+                    # if self.music_is_playable:
+                    #     # l_audio.play(0,1)
                     
         screen.blit(self.border,self.position)

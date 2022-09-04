@@ -1,4 +1,5 @@
 import pygame
+
 import l_font
 
 display_string = 'A8'
