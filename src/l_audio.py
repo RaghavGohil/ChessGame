@@ -10,8 +10,8 @@ mixer.music.set_volume(l_settings.master_audio_volume)
 # music (paths)
 
 location_select = os.path.join(l_settings.base_path,'../audio/LocationSelect.wav')
-move_piece = os.path.join(l_settings.base_path,'')
-eat_piece = os.path.join(l_settings.base_path,'')
+move_piece = os.path.join(l_settings.base_path,'../audio/MovePiece.wav')
+eat_piece = os.path.join(l_settings.base_path,'../audio/EatPiece.wav')
 
 audio_playlist = [
 
@@ -20,6 +20,9 @@ audio_playlist = [
     eat_piece,
 
 ]
+
+def stop_music():
+    mixer.music.stop()
 
 def play(i,mode): # play at index from the playlist (mode specifies if provided audio is music or sound)
     for x in range(len(audio_playlist)):

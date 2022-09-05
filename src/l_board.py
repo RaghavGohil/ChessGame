@@ -5,7 +5,7 @@ import os
 class Board:
     def __init__(self, base_path, size):
         self.board = pygame.image.load(
-            os.path.join(base_path, "../images/Board.png"))
+            os.path.join(base_path, "../images/Board.png")).convert()
         self.size = size  # (winh, winh)
         self.position = (0, 0)
         self.xblocks = ['A','B','C','D','E','F','G','H']
