@@ -21,18 +21,18 @@ class Board:
             'p','p','p','p','p','p','p','p',
             'r','n','b','q','k','b','n','r', # white is represented by lower case
         ]
-        self.w_pawn = self.generate_charboard('p')
-        self.w_rook = self.generate_charboard('r')
-        self.w_knight = self.generate_charboard('n')
-        self.w_bishop = self.generate_charboard('b')
-        self.w_queen = self.generate_charboard('q')
-        self.w_king = self.generate_charboard('k')
-        self.b_pawn = self.generate_charboard('P')
-        self.b_rook = self.generate_charboard('R')
-        self.b_knight = self.generate_charboard('N')
-        self.b_bishop = self.generate_charboard('B')
-        self.b_queen = self.generate_charboard('Q')
-        self.b_king = self.generate_charboard('K')
+        self.w_pawn = self.generate_charboard('p',self.char_board)
+        self.w_rook = self.generate_charboard('r',self.char_board)
+        self.w_knight = self.generate_charboard('n',self.char_board)
+        self.w_bishop = self.generate_charboard('b',self.char_board)
+        self.w_queen = self.generate_charboard('q',self.char_board)
+        self.w_king = self.generate_charboard('k',self.char_board)
+        self.b_pawn = self.generate_charboard('P',self.char_board)
+        self.b_rook = self.generate_charboard('R',self.char_board)
+        self.b_knight = self.generate_charboard('N',self.char_board)
+        self.b_bishop = self.generate_charboard('B',self.char_board)
+        self.b_queen = self.generate_charboard('Q',self.char_board)
+        self.b_king = self.generate_charboard('K',self.char_board)
         self.char_piece_boards = [self.w_pawn,self.w_rook,self.w_knight,self.w_bishop,self.w_queen,self.w_king,self.b_pawn,self.b_rook,self.b_knight,self.b_bishop,self.b_queen,self.b_king]
         self.mask = [
             0,0,0,0,0,0,0,1,
@@ -73,7 +73,7 @@ class Board:
 
 
     def display(self,screen):
-        self.board = pygame.transform.scale(self.board_img, self.size)
+        self.board = pygame.transform.scale(self.board_img, self.ps)
         screen.blit(self.board_img, self.position)
     
     

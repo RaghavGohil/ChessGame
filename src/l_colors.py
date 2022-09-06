@@ -1,3 +1,3 @@
-bg_color = (79, 79, 79)
-current_location_font_color = (28, 28, 28)
-current_location_font_bounding_box_color = (100, 100, 100)
+bg_color = (84, 105, 68)
+current_location_font_color = (147,178,103)
+current_location_font_bounding_box_color = (60,84,55)

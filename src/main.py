@@ -18,7 +18,7 @@ pygame.init()
 # pygame variables:
 deltatime = 0
 now = 0
-winw = 800
+winw = 1000
 winh = 600
 winsize = (winw, winh)
 screen = pygame.display.set_mode(winsize)
@@ -47,6 +47,8 @@ def display_pieces():
 
 def init():
     global board,border
+
+    l_audio.play(0,0) #play start sound
 
     board = l_board.Board(l_settings.base_path,(winsize[1],winsize[1]))
     border = l_border.Border(l_settings.base_path)

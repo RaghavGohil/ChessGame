@@ -1,3 +1,5 @@
+from ctypes import cast
+from shutil import move
 from pygame import mixer
 import os
 
@@ -9,15 +11,25 @@ mixer.music.set_volume(l_settings.master_audio_volume)
 
 # music (paths)
 
-location_select = os.path.join(l_settings.base_path,'../audio/LocationSelect.wav')
-move_piece = os.path.join(l_settings.base_path,'../audio/MovePiece.wav')
-eat_piece = os.path.join(l_settings.base_path,'../audio/EatPiece.wav')
+start = os.path.join(l_settings.base_path,'../audio/Start.wav')
+over = os.path.join(l_settings.base_path,'../audio/Over.wav')
+stale_mate = os.path.join(l_settings.base_path,'../audio/StaleMate.wav')
+check_mate = os.path.join(l_settings.base_path,'../audio/CheckMate.wav')
+move_piece = os.path.join(l_settings.base_path,'../audio/Move.wav')
+capture = os.path.join(l_settings.base_path,'../audio/Capture.wav')
+castling = os.path.join(l_settings.base_path,'../audio/Castling.wav')
+check = os.path.join(l_settings.base_path,'../audio/Check.wav')
 
 audio_playlist = [
 
-    location_select,
+    start,
+    over,
+    stale_mate,
+    check_mate,
     move_piece,
-    eat_piece,
+    capture,
+    castling,
+    check
 
 ]
 
