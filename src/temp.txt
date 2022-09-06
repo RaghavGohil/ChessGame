@@ -1,0 +1,82 @@
+# charboard = [ # use this for drawing to the main screen (operations will be done on charboard which will be converted to bitboards)
+
+#     'R','N','B','Q','K','B','N','R', # black is represented by upper case
+#     'P','P','P','P','P','P','P','P',
+#     'e','e','e','e','e','e','e','e',
+#     'e','e','e','e','e','e','e','e',
+#     'e','e','e','e','e','e','e','e',
+#     'e','e','e','e','e','e','e','e',
+#     'p','p','p','p','p','p','p','p',
+#     'r','n','b','q','k','b','n','r', # white is represented by lower case
+
+# ]
+
+# def generate_charboard(piece)->list: # generate character board instead of the normal bit board
+
+#     arr = []
+
+#     for x in charboard:
+#         if (x == piece):
+#             arr.append(x)
+#         else:
+#             arr.append('e')
+
+#     return arr
+
+# def update_board(mainboard,cpba): # performance heavy.. should be called once per move (cpba is char piece board array , cpb is char piece board in that array)
+#     for cpb in cpba:
+#         temp = 'n'
+#         for x in range(64): # fill in temp with the charboard type thing
+#             if(cpb[x] != 'e'):
+#                 temp = cpb[x]
+#                 break
+#         for y in range(64):
+#             if(mainboard[y] == temp): # make previous spaces empty
+#                 mainboard[y] = 'e'
+#             if(cpb[y] != 'e'): # is not empty
+#                 mainboard[y] = cpb[y]
+
+# # these can be converted to bitboards by making 'e' as 0 and '<piece>' as 1 (then do some operations with the bitboards and retrieve the result)
+
+# w_pawn = generate_charboard('p')
+
+# w_rook = generate_charboard('r')
+
+# w_knight = generate_charboard('n')
+
+# w_bishop = generate_charboard('b')
+
+# w_queen = generate_charboard('q')
+
+# w_king = generate_charboard('k')
+
+# b_pawn = generate_charboard('P')
+
+# b_rook = generate_charboard('R')
+
+# b_knight = generate_charboard('N')
+
+# b_bishop = generate_charboard('B')
+
+# b_queen = generate_charboard('Q')
+
+# b_king = generate_charboard('K')
+
+# # array consisting of all the charboards
+
+# charpieceboards = [w_pawn,w_rook,w_knight,w_bishop,w_queen,w_king,b_pawn,b_rook,b_knight,b_bishop,b_queen,b_king]
+
+# # mask is used for avoiding irregular placement of the pawns
+
+# mask = [
+
+#     0,0,0,0,0,0,0,1,
+#     0,0,0,0,0,0,0,1,
+#     0,0,0,0,0,0,0,1,
+#     0,0,0,0,0,0,0,1,
+#     0,0,0,0,0,0,0,1,
+#     0,0,0,0,0,0,0,1,
+#     0,0,0,0,0,0,0,1,
+#     0,0,0,0,0,0,0,1,
+
+# ]

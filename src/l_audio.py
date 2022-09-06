@@ -43,5 +43,5 @@ def play_music(musicpath):
     mixer.music.load(musicpath)
     mixer.music.play()
 
-def pquit():
+def pquit(): #pquit stands for pygame quit
     mixer.quit()

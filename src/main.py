@@ -43,7 +43,7 @@ def move_piece(object,board):
 
 def display_pieces():
     
-    pass
+    pass    
 
 def init():
     global board,border
