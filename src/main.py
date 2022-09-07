@@ -44,34 +44,37 @@ def quit_game():
 # game variables
 piece_is_held = False
 offsetx,offsety = 0,0
+piece_prev_pos = [0,0]
 attached_pieces = []
 
 def move_piece():
     global piece_is_held,offsetx,offsety,attached_pieces
     mousepos = pygame.mouse.get_pos()
     pressed = pygame.mouse.get_pressed()
-
     for e in events:
         for p in pieces:
             if((mousepos[0] > p.position[0] and mousepos[0] < (p.position[0]+board.isps)) and (mousepos[1] > p.position[1] and mousepos[1] < (p.position[1]+board.isps))):
                 if pressed[0] and not piece_is_held:
                     piece_is_held = True
-                    if len(attached_pieces) < 1:
-                        attached_pieces.append(p)
+                    attached_pieces.append(p)
                     offsetx = (mousepos[0]-attached_pieces[0].position[0])
                     offsety = (mousepos[1]-attached_pieces[0].position[1])
-                    # piece_prev_pos[0] = p.position[0]
-                    # piece_prev_pos[1] = p.position[1]
+                    piece_prev_pos[0] = attached_pieces[0].position[0]
+                    piece_prev_pos[1] = attached_pieces[0].position[1]
                 if not pressed[0] and piece_is_held:      
                         piece_is_held = False
-                        attached_pieces[0].position[0] = border.position[0]
-                        attached_pieces[0].position[1] = border.position[1] # wierd but works lmao
-                        attached_pieces.pop(0)
+                        if (p.position[0] != border.position[0] and p.position[1] != border.position):
+                            attached_pieces[0].position[0] = border.position[0]
+                            attached_pieces[0].position[1] = border.position[1] # wierd but works lmao
+                        else:
+                            attached_pieces[0].position[0] = piece_prev_pos[0]
+                            attached_pieces[0].position[1] = piece_prev_pos[1] # prevpos
+                        attached_pieces = []
                         offsetx,offsety = 0,0
                         l_audio.play(4,0)
         if e.type == MOUSEMOTION and piece_is_held:
-                    attached_pieces[0].position[0] = mousepos[0]-offsetx
-                    attached_pieces[0].position[1] = mousepos[1]-offsety
+            attached_pieces[0].position[0] = mousepos[0]-offsetx
+            attached_pieces[0].position[1] = mousepos[1]-offsety
 
 def initialize_pieces(): # very performance heavy!
     global pieces
