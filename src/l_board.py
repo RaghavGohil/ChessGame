@@ -57,18 +57,21 @@ class Board:
 
         return arr
     
-    def update_board(cba:list,cpba:list): # performance heavy.. should be called once per move (cpba is char piece board array , cpb is char piece board in that array)
-        for cpb in cpba:
+    def update_board(self): # performance heavy.. should be called once per move (cpba is char piece board array , cpb is char piece board in that array)
+
+        self.char_piece_boards = [self.w_pawn,self.w_rook,self.w_knight,self.w_bishop,self.w_queen,self.w_king,self.b_pawn,self.b_rook,self.b_knight,self.b_bishop,self.b_queen,self.b_king] # updated this because without this being updated the array in mem will always be default.
+
+        for cpb in self.char_piece_boards:
             temp = 'n'
             for x in range(64): # fill in temp with the charboard type thing
                 if(cpb[x] != 'e'):
                     temp = cpb[x]
                     break
             for y in range(64):
-                if(cba[y] == temp): # make previous spaces empty
-                    cba[y] = 'e'
+                if(self.char_board[y] == temp): # make previous spaces empty
+                    self.char_board[y] = 'e'
                 if(cpb[y] != 'e'): # is not empty
-                    cba[y] = cpb[y]
+                    self.char_board[y] = cpb[y]
     
 
 

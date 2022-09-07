@@ -40,8 +40,16 @@ def quit_game():
     l_audio.pquit()
     quit()
 
-def initialize_pieces():
-    
+def move_piece():
+    for e in events:
+        if e.type == pygame.KEYDOWN:
+            if e.key == pygame.K_w:
+                board.w_pawn = ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 
+'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'p', 'e', 'p', 'p', 'p', 'p', 'p', 'p', 'e', 'p', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e']
+                l_audio.play(4,0)
+                board.update_board()
+
+def update_pieces(): # very performance heavy!
     global pieces
 
     pieces = []
@@ -74,19 +82,6 @@ def initialize_pieces():
                 pieces.append(l_piece.Piece((y*75,x*75),l_settings.base_path,'q'))
             elif(board.char_board[y+(x*8)] == 'k'):
                 pieces.append(l_piece.Piece((y*75,x*75),l_settings.base_path,'k'))
-    print(len(pieces))
-def move_piece(object):
-
-    pass
-
-def update_pieces():
-    for x in range(len(board.xblocks)):
-        for y in range(len(board.yblocks)):
-            if(board.char_board[y+(x*8)] == 'e'):
-                continue
-            for z in range(len(pieces)):
-                if(board.char_board[y+(x*8)] == pieces[z].piece):
-                    pieces[z].position = (y*75,x*75)
 
 def display_pieces(): # i haven't looped all this nonsense because of readablility issues
     for x in pieces:
@@ -96,15 +91,14 @@ def init():
     global board,border
 
     l_audio.play(0,0) #play start sound
-
     board = l_board.Board(l_settings.base_path,(winsize[1],winsize[1]))
     border = l_border.Border(l_settings.base_path)
-    initialize_pieces()
 
 def main():
     board.display(screen)
     border.display(screen,board)
     update_pieces()
+    move_piece()
     display_pieces()
     l_in_game_locator.render_current_in_game_location(screen,initialized_font,board,l_colors.current_location_font_bounding_box_color,l_colors.current_location_font_color,winw,winh,l_font.font_antialiasing)
 
