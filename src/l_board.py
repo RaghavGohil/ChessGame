@@ -3,7 +3,7 @@ import os
 
 
 class Board:
-    def __init__(self, base_path, ps):
+    def __init__(self, base_path:str, ps:tuple):
         self.board_img = pygame.image.load(
             os.path.join(base_path, "../images/Board.png")).convert()
         self.ps = ps # (winh, winh) pixel size
@@ -45,7 +45,7 @@ class Board:
             0,0,0,0,0,0,0,1,
         ]
 
-    def generate_charboard(self,piece,cba)->list: # generate character board instead of the normal bit board (cba is char board array)
+    def generate_charboard(self,piece:str,cba:list)->list: # generate character board instead of the normal bit board (cba is char board array)
 
         arr = []
 
@@ -57,7 +57,7 @@ class Board:
 
         return arr
     
-    def update_board(cba,cpba): # performance heavy.. should be called once per move (cpba is char piece board array , cpb is char piece board in that array)
+    def update_board(cba:list,cpba:list): # performance heavy.. should be called once per move (cpba is char piece board array , cpb is char piece board in that array)
         for cpb in cpba:
             temp = 'n'
             for x in range(64): # fill in temp with the charboard type thing
@@ -72,7 +72,7 @@ class Board:
     
 
 
-    def display(self,screen):
+    def display(self,screen:pygame.Surface):
         self.board = pygame.transform.scale(self.board_img, self.ps)
         screen.blit(self.board_img, self.position)
     

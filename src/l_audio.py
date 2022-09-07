@@ -36,7 +36,7 @@ audio_playlist = [
 def stop_music():
     mixer.music.stop()
 
-def play(i,mode): # play at index from the playlist (mode specifies if provided audio is music or sound)
+def play(i:int,mode:int): # play at index from the playlist (mode specifies if provided audio is music or sound)
     for x in range(len(audio_playlist)):
         if(i == x):
             if(mode == 0):
@@ -48,10 +48,10 @@ def play(i,mode): # play at index from the playlist (mode specifies if provided 
             return
     raise Exception("Audio file cannot be played.")
 
-def play_sound(soundpath):
+def play_sound(soundpath:str):
     mixer.Sound(soundpath).play()
 
-def play_music(musicpath):
+def play_music(musicpath:str):
     mixer.music.load(musicpath)
     mixer.music.play()
 

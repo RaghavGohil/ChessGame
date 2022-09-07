@@ -1,6 +1,6 @@
 # bitboard functions exist here.
 
-def chararr_to_bitarr(arr)->list:
+def chararr_to_bitarr(arr:list)->list:
     r = []
     if(len(arr) != 64):
             print('Length specified is not equal to a chess bitboard array.')

@@ -1,10 +1,11 @@
 import pygame
 
 import l_font
+from l_board import Board
 
 display_string = 'A8'
 
-def render_current_in_game_location(screen,initialized_font,board,bounding_box_color,font_color,winw,winh,font_antialiasing):
+def render_current_in_game_location(screen:pygame.Surface,initialized_font:pygame.sysfont,board:Board,bounding_box_color:tuple,font_color:tuple,winw:int,winh:int,font_antialiasing:bool):
     global display_string
     pygame.draw.rect(screen,bounding_box_color,((winw-40),(winh-35),40,35))
     mousepos = pygame.mouse.get_pos()
