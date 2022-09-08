@@ -1,3 +1,5 @@
+from re import A
+from turtle import clear
 from typing import Any
 import os
 import pygame
@@ -46,37 +48,57 @@ piece_is_held = False
 offsetx,offsety = 0,0
 piece_prev_pos = [0,0]
 attached_pieces = []
+clear_attached_pieces = False
 
 def move_piece():
-    global piece_is_held,offsetx,offsety,attached_pieces
+    global piece_is_held,offsetx,offsety,attached_pieces,clear_attached_pieces
     mousepos = pygame.mouse.get_pos()
     pressed = pygame.mouse.get_pressed()
+    print(len(attached_pieces))
     for e in events:
         for p in pieces:
             if((mousepos[0] > p.position[0] and mousepos[0] < (p.position[0]+board.isps)) and (mousepos[1] > p.position[1] and mousepos[1] < (p.position[1]+board.isps))):
+                if(pressed[0]):
+                    if(len(attached_pieces) != 0):
+                        if(p not in attached_pieces):
+                            attached_pieces.append(p)
+                    else:
+                        attached_pieces.append(p)
+                    for piece in attached_pieces:
+                        if(piece != attached_pieces[0]):
+                            print(piece.position[0] == border.position[0] and piece.position[1] == border.position[1])
+                            if(piece.position[0] == border.position[0] and piece.position[1] == border.position[1]):
+                                pass
+                            else:
+                                clear_attached_pieces = True
+
+                    if clear_attached_pieces and len(attached_pieces) != 0:
+                        attached_pieces = [attached_pieces[0]]
+                        clear_attached_pieces = False
+
                 if pressed[0] and not piece_is_held:
                     piece_is_held = True
-                    attached_pieces.append(p)
-                    offsetx = (mousepos[0]-attached_pieces[0].position[0])
+                    offsetx = (mousepos[0]-attached_pieces[0].position[0]) # set mouse offset for holding the piece
                     offsety = (mousepos[1]-attached_pieces[0].position[1])
                     piece_prev_pos[0] = attached_pieces[0].position[0]
                     piece_prev_pos[1] = attached_pieces[0].position[1]
                 if not pressed[0] and piece_is_held:      
                         piece_is_held = False
-                        if (p.position[0] != border.position[0] and p.position[1] != border.position):
+                        if len(attached_pieces) < 2: # check if there are extra pieces attached / there is a piece on desired landing location
                             attached_pieces[0].position[0] = border.position[0]
-                            attached_pieces[0].position[1] = border.position[1] # wierd but works lmao
+                            attached_pieces[0].position[1] = border.position[1] # works lmao
                         else:
                             attached_pieces[0].position[0] = piece_prev_pos[0]
                             attached_pieces[0].position[1] = piece_prev_pos[1] # prevpos
+                        if(attached_pieces[0].position[0] != piece_prev_pos[0] or attached_pieces[0].position[1] != piece_prev_pos[1]): # play audio only when moved
+                            l_audio.play(4,0)
                         attached_pieces = []
                         offsetx,offsety = 0,0
-                        l_audio.play(4,0)
         if e.type == MOUSEMOTION and piece_is_held:
             attached_pieces[0].position[0] = mousepos[0]-offsetx
             attached_pieces[0].position[1] = mousepos[1]-offsety
 
-def initialize_pieces(): # very performance heavy!
+def initialize_pieces(): # very performance heavy! I haven't looped all this nonsense because of readablility issues
     global pieces
 
     pieces = []
@@ -110,7 +132,7 @@ def initialize_pieces(): # very performance heavy!
             elif(board.char_board[y+(x*8)] == 'k'):
                 pieces.append(l_piece.Piece([y*board.isps,x*board.isps],l_settings.base_path,'k'))
 
-def display_pieces(): # i haven't looped all this nonsense because of readablility issues
+def display_pieces():
     for x in pieces:
         x.display(screen)
 

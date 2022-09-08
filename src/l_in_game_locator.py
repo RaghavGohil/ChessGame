@@ -12,7 +12,7 @@ def render_current_in_game_location(screen:pygame.Surface,initialized_font:pygam
     if (mousepos[1] < board.ps[1] and mousepos[1] > 0) and (mousepos[0] < board.ps[0] and mousepos[0] > 0):
         for x in range(len(board.xblocks)):
             for y in range(len(board.yblocks)):
-                if((mousepos[0] > x*board.isps and mousepos[0] < (x+1)*board.isps) and (mousepos[1] > y*board.isps and mousepos[1] < (y+1)*board.isps)):
+                if(mousepos[0] > x*board.isps and mousepos[1] > y*board.isps ):
                     display_string = ''
                     display_string += board.xblocks[x]
                     display_string += str(board.yblocks[len(board.yblocks)-(y+1)])
