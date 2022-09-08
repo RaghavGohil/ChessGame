@@ -1,3 +1,6 @@
 bg_color = (84, 105, 68)
 current_location_font_color = (147,178,103)
 current_location_font_bounding_box_color = (60,84,55)
+piece_container_color = (147,178,103)
+clicked_location_box = (217, 195, 85)
+dropped_location_box = (217, 114, 85)

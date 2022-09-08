@@ -1,6 +1,3 @@
-from re import A
-from turtle import clear
-from typing import Any
 import os
 import pygame
 from pygame.locals import *
@@ -14,6 +11,7 @@ import l_in_game_locator
 import l_font
 import l_bitboards
 import l_audio
+import l_piece_container
 
 # initializing pygame
 pygame.init()
@@ -23,8 +21,11 @@ deltatime = 0
 now = 0
 winw = 1000
 winh = 600
-winsize = (winw, winh)
-screen = pygame.display.set_mode(winsize)
+winsize = [winw, winh]
+if not l_settings.screen_is_resizable:
+    screen = pygame.display.set_mode(winsize)
+else:
+    screen = pygame.display.set_mode(winsize,pygame.RESIZABLE)
 pygame.display.set_caption(l_settings.game_name)
 try:
     pygame.display.set_icon(pygame.image.load(os.path.join(l_settings.base_path,l_settings.game_icon_path)))
@@ -43,112 +44,26 @@ def quit_game():
     l_audio.pquit()
     quit()
 
-# game variables
-piece_is_held = False
-offsetx,offsety = 0,0
-piece_prev_pos = [0,0]
-attached_pieces = []
-clear_attached_pieces = False
-
-def move_piece():
-    global piece_is_held,offsetx,offsety,attached_pieces,clear_attached_pieces
-    mousepos = pygame.mouse.get_pos()
-    pressed = pygame.mouse.get_pressed()
-    print(len(attached_pieces))
-    for e in events:
-        for p in pieces:
-            if((mousepos[0] > p.position[0] and mousepos[0] < (p.position[0]+board.isps)) and (mousepos[1] > p.position[1] and mousepos[1] < (p.position[1]+board.isps))):
-                if(pressed[0]):
-                    if(len(attached_pieces) != 0):
-                        if(p not in attached_pieces):
-                            attached_pieces.append(p)
-                    else:
-                        attached_pieces.append(p)
-                    for piece in attached_pieces:
-                        if(piece != attached_pieces[0]):
-                            print(piece.position[0] == border.position[0] and piece.position[1] == border.position[1])
-                            if(piece.position[0] == border.position[0] and piece.position[1] == border.position[1]):
-                                pass
-                            else:
-                                clear_attached_pieces = True
-
-                    if clear_attached_pieces and len(attached_pieces) != 0:
-                        attached_pieces = [attached_pieces[0]]
-                        clear_attached_pieces = False
-
-                if pressed[0] and not piece_is_held:
-                    piece_is_held = True
-                    offsetx = (mousepos[0]-attached_pieces[0].position[0]) # set mouse offset for holding the piece
-                    offsety = (mousepos[1]-attached_pieces[0].position[1])
-                    piece_prev_pos[0] = attached_pieces[0].position[0]
-                    piece_prev_pos[1] = attached_pieces[0].position[1]
-                if not pressed[0] and piece_is_held:      
-                        piece_is_held = False
-                        if len(attached_pieces) < 2: # check if there are extra pieces attached / there is a piece on desired landing location
-                            attached_pieces[0].position[0] = border.position[0]
-                            attached_pieces[0].position[1] = border.position[1] # works lmao
-                        else:
-                            attached_pieces[0].position[0] = piece_prev_pos[0]
-                            attached_pieces[0].position[1] = piece_prev_pos[1] # prevpos
-                        if(attached_pieces[0].position[0] != piece_prev_pos[0] or attached_pieces[0].position[1] != piece_prev_pos[1]): # play audio only when moved
-                            l_audio.play(4,0)
-                        attached_pieces = []
-                        offsetx,offsety = 0,0
-        if e.type == MOUSEMOTION and piece_is_held:
-            attached_pieces[0].position[0] = mousepos[0]-offsetx
-            attached_pieces[0].position[1] = mousepos[1]-offsety
-
-def initialize_pieces(): # very performance heavy! I haven't looped all this nonsense because of readablility issues
-    global pieces
-
-    pieces = []
-
-    for x in range(len(board.xblocks)):
-        for y in range(len(board.yblocks)):
-            if(board.char_board[y+(x*8)] == 'e'):
-                continue
-            elif(board.char_board[y+(x*8)] == 'P'):
-                pieces.append(l_piece.Piece([y*board.isps,x*board.isps],l_settings.base_path,'P'))
-            elif(board.char_board[y+(x*8)] == 'R'):
-                pieces.append(l_piece.Piece([y*board.isps,x*board.isps],l_settings.base_path,'R'))
-            elif(board.char_board[y+(x*8)] == 'N'):
-                pieces.append(l_piece.Piece([y*board.isps,x*board.isps],l_settings.base_path,'N'))
-            elif(board.char_board[y+(x*8)] == 'B'):
-                pieces.append(l_piece.Piece([y*board.isps,x*board.isps],l_settings.base_path,'B'))
-            elif(board.char_board[y+(x*8)] == 'Q'):
-                pieces.append(l_piece.Piece([y*board.isps,x*board.isps],l_settings.base_path,'Q'))
-            elif(board.char_board[y+(x*8)] == 'K'):
-                pieces.append(l_piece.Piece([y*board.isps,x*board.isps],l_settings.base_path,'K'))
-            elif(board.char_board[y+(x*8)] == 'p'):
-                pieces.append(l_piece.Piece([y*board.isps,x*board.isps],l_settings.base_path,'p'))
-            elif(board.char_board[y+(x*8)] == 'r'):
-                pieces.append(l_piece.Piece([y*board.isps,x*board.isps],l_settings.base_path,'r'))
-            elif(board.char_board[y+(x*8)] == 'n'):
-                pieces.append(l_piece.Piece([y*board.isps,x*board.isps],l_settings.base_path,'n'))
-            elif(board.char_board[y+(x*8)] == 'b'):
-                pieces.append(l_piece.Piece([y*board.isps,x*board.isps],l_settings.base_path,'b'))
-            elif(board.char_board[y+(x*8)] == 'q'):
-                pieces.append(l_piece.Piece([y*board.isps,x*board.isps],l_settings.base_path,'q'))
-            elif(board.char_board[y+(x*8)] == 'k'):
-                pieces.append(l_piece.Piece([y*board.isps,x*board.isps],l_settings.base_path,'k'))
-
-def display_pieces():
-    for x in pieces:
-        x.display(screen)
+def update_window_width_and_height():
+    if l_settings.screen_is_resizable:
+        winsize[0] = screen.get_width()
+        winsize[1] = screen.get_height()
 
 def init():
-    global board,border
+    global board,border,piece_container
 
     l_audio.play(0,0) #play start sound
     board = l_board.Board(l_settings.base_path,(winsize[1],winsize[1]))
     border = l_border.Border(l_settings.base_path)
-    initialize_pieces()
+    piece_container = l_piece_container.PieceContainer([board.ps[0] + 20,20],[winsize[0]-(board.ps[0]+20)-20,100])
+    l_piece.initialize_pieces(board)
 
 def main():
     board.display(screen)
+    piece_container.display(screen)
+    l_piece.move_piece(events,board,border,MOUSEMOTION,screen)
     border.display(screen,board)
-    move_piece()
-    display_pieces()
+    l_piece.display_pieces(screen)
     l_in_game_locator.render_current_in_game_location(screen,initialized_font,board,l_colors.current_location_font_bounding_box_color,l_colors.current_location_font_color,winw,winh,l_font.font_antialiasing)
 
 # initialize variables and run the game loop:
@@ -156,6 +71,8 @@ def main():
 init()
 
 while True:
+
+    update_window_width_and_height()
 
     now = pygame.time.get_ticks()
 
