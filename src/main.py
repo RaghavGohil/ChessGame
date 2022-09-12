@@ -57,7 +57,7 @@ def init():
 def main():
     board.display(screen)
     piece_container.display(screen)
-    l_piece.move_piece(events,board,border,MOUSEMOTION,screen)
+    l_piece.process_piece_events(events,board,border,MOUSEMOTION,screen,piece_container)
     border.display(screen,board)
     l_piece.display_pieces(screen)
     l_in_game_locator.render_current_in_game_location(screen,board,l_colors.current_location_font_bounding_box_color,l_colors.current_location_font_color,winw,winh)

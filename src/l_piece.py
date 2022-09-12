@@ -1,3 +1,4 @@
+from typing import Any
 import pygame
 import os
 
@@ -84,7 +85,7 @@ attached_pieces = []
 piece_prev_pos = [0,0]
 recent_move = [0,0]
 
-def move_piece(events , board:Board , border:Border , mousemotionconst:int , screen): # optimized i guess
+def process_piece_events(events , board:Board , border:Border , mousemotionconst:int , screen:pygame.Surface , piece_container:Any): # optimized i guess
     global piece_is_held,offsetx,offsety,attached_pieces,clear_attached_pieces,recent_move,pieces_are_moved,whitesturn
     mousepos = pygame.mouse.get_pos()
     pressed = pygame.mouse.get_pressed()
@@ -132,11 +133,36 @@ def move_piece(events , board:Board , border:Border , mousemotionconst:int , scr
                         piece_is_held = False
                         if len(attached_pieces) < 2: # check if there are extra pieces attached / there is a piece on desired landing location
                             attached_pieces[0].position[0] = border.position[0]
-                            attached_pieces[0].position[1] = border.position[1] # works lmao
+                            attached_pieces[0].position[1] = border.position[1]  # works lmao
                             recent_move[0] = border.position[0]
                             recent_move[1] = border.position[1]
                             whitesturn = not whitesturn # toggle turn here
                             pieces_are_moved = True
+                        elif len(attached_pieces) == 2: # white eats piece!
+                            if(attached_pieces[0].piece in white_pieces and whitesturn) and attached_pieces[1].piece in black_pieces:
+                                l_audio.play(5,0)
+                                piece_container.add_piece(attached_pieces[1])
+                                pieces.remove(attached_pieces[1])
+                                del attached_pieces[1]
+                                attached_pieces[0].position[0] = border.position[0]
+                                attached_pieces[0].position[1] = border.position[1]
+                                recent_move[0] = border.position[0]
+                                recent_move[1] = border.position[1]
+                                whitesturn = False # toggle turn here
+                                pieces_are_moved = True
+
+                            if(attached_pieces[0].piece in black_pieces and not whitesturn) and attached_pieces[1].piece in white_pieces:
+                                l_audio.play(5,0)
+                                piece_container.add_piece(attached_pieces[1])
+                                pieces.remove(attached_pieces[1])
+                                del attached_pieces[1]
+                                attached_pieces[0].position[0] = border.position[0]
+                                attached_pieces[0].position[1] = border.position[1]
+                                recent_move[0] = border.position[0]
+                                recent_move[1] = border.position[1]
+                                whitesturn = True # toggle turn here
+                                pieces_are_moved = True
+
                         else:
                             attached_pieces[0].position[0] = piece_prev_pos[0]
                             attached_pieces[0].position[1] = piece_prev_pos[1] # prevpos

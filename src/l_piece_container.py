@@ -1,6 +1,8 @@
 import pygame
+
 import l_colors
 import l_font
+from l_piece import Piece
 
 class PieceContainer:
     def __init__(self,position:list,size:list):
@@ -9,12 +11,17 @@ class PieceContainer:
         self.header_text = 'Captured Pieces:'
         self.header_x = (self.position[0]+5)
         self.header_y = (self.position[1]+5)
-        self.start_offset = [self.position[0]+5,self.position[1]+10] # offset for placing pieces
+        self.start_offset = [self.position[0]+3,self.position[1]+30] # offset for placing pieces
+        self.captured_pieces = []
+        self.individual_captured_piece_img_size = [40,40]
 
         
     def display(self,screen:pygame.Surface):
         pygame.draw.rect(screen,l_colors.piece_container_color,(self.position[0],self.position[1],self.size[0],self.size[1]))
-        l_font.render_text(screen,25,self.header_x,self.header_y,self.header_text,l_colors.piece_container_display_text_color)
+        l_font.render_text(screen,30,self.header_x,self.header_y,self.header_text,l_colors.piece_container_display_text_color)
+        for cp in self.captured_pieces:
+            img = pygame.transform.smoothscale(cp.piece_img,self.individual_captured_piece_img_size)
+            blit = screen.blit(img,self.start_offset)
 
-    def add_piece():
-        pass
+    def add_piece(self,piece:Piece):
+        self.captured_pieces.append(piece)
