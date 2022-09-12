@@ -136,7 +136,8 @@ def process_piece_events(events , board:Board , border:Border , mousemotionconst
                             attached_pieces[0].position[1] = border.position[1]  # works lmao
                             recent_move[0] = border.position[0]
                             recent_move[1] = border.position[1]
-                            whitesturn = not whitesturn # toggle turn here
+                            if attached_pieces[0].position != piece_prev_pos:
+                                whitesturn = not whitesturn # toggle turn here
                             pieces_are_moved = True
                         elif len(attached_pieces) == 2: # white eats piece!
                             if(attached_pieces[0].piece in white_pieces and whitesturn) and attached_pieces[1].piece in black_pieces:
@@ -151,6 +152,10 @@ def process_piece_events(events , board:Board , border:Border , mousemotionconst
                                 whitesturn = False # toggle turn here
                                 pieces_are_moved = True
 
+                            elif((attached_pieces[0].piece in white_pieces and whitesturn) and attached_pieces[1].piece in white_pieces):
+                                attached_pieces[0].position[0] = piece_prev_pos[0]
+                                attached_pieces[0].position[1] = piece_prev_pos[1] # prevpos
+
                             if(attached_pieces[0].piece in black_pieces and not whitesturn) and attached_pieces[1].piece in white_pieces:
                                 l_audio.play(5,0)
                                 piece_container.add_piece(attached_pieces[1])
@@ -163,9 +168,14 @@ def process_piece_events(events , board:Board , border:Border , mousemotionconst
                                 whitesturn = True # toggle turn here
                                 pieces_are_moved = True
 
+                            elif((attached_pieces[0].piece in black_pieces and not whitesturn) and attached_pieces[1].piece in black_pieces):
+                                attached_pieces[0].position[0] = piece_prev_pos[0]
+                                attached_pieces[0].position[1] = piece_prev_pos[1] # prevpos
+
                         else:
-                            attached_pieces[0].position[0] = piece_prev_pos[0]
-                            attached_pieces[0].position[1] = piece_prev_pos[1] # prevpos
+                                attached_pieces[0].position[0] = piece_prev_pos[0]
+                                attached_pieces[0].position[1] = piece_prev_pos[1] # prevpos
+                        
                         if(attached_pieces[0].position[0] != piece_prev_pos[0] or attached_pieces[0].position[1] != piece_prev_pos[1]): # play audio only when moved
                             l_audio.play(4,0)
                         attached_pieces = []

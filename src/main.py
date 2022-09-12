@@ -51,7 +51,7 @@ def init():
     l_audio.play(0,0) #play start sound
     board = l_board.Board(l_settings.base_path,(winsize[1],winsize[1]))
     border = l_border.Border(l_settings.base_path)
-    piece_container = l_piece_container.PieceContainer([board.ps[0] + 20,20],[winsize[0]-(board.ps[0]+20)-20,100])
+    piece_container = l_piece_container.PieceContainer([board.ps[0] + 20,20],[winsize[0]-(board.ps[0]+20)-60,193])
     l_piece.initialize_pieces(board)
 
 def main():
