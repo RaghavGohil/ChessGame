@@ -5,7 +5,7 @@ from l_board import Board
 
 display_string = 'A8'
 
-def render_current_in_game_location(screen:pygame.Surface,initialized_font:pygame.sysfont,board:Board,bounding_box_color:tuple,font_color:tuple,winw:int,winh:int,font_antialiasing:bool):
+def render_current_in_game_location(screen:pygame.Surface,board:Board,bounding_box_color:tuple,font_color:tuple,winw:int,winh:int):
     global display_string
     pygame.draw.rect(screen,bounding_box_color,((winw-40),(winh-35),40,35))
     mousepos = pygame.mouse.get_pos()
@@ -17,4 +17,4 @@ def render_current_in_game_location(screen:pygame.Surface,initialized_font:pygam
                     display_string += board.xblocks[x]
                     display_string += str(board.yblocks[len(board.yblocks)-(y+1)])
     
-    l_font.render_text(screen,initialized_font,font_antialiasing,(winw-36),(winh-28),display_string,font_color)
+    l_font.render_text(screen,35,(winw-36),(winh-28),display_string,font_color)

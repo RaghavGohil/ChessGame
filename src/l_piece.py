@@ -37,7 +37,7 @@ class Piece:
             self.piece_img = pygame.image.load(os.path.join(l_settings.base_path,'../images/w_king.png')).convert_alpha()
 
     def display(self,screen):
-        self.piece = screen.blit(self.piece_img,self.position)
+        self.piece_blit = screen.blit(self.piece_img,self.position)
 
 def initialize_pieces(board:Board): # optimized
     global pieces
@@ -73,7 +73,9 @@ def initialize_pieces(board:Board): # optimized
             elif(board.char_board[y+(x*8)] == 'k'):
                 pieces.append(Piece([y*board.isps,x*board.isps],l_settings.base_path,'k'))
 
-# game variables
+whitesturn = True
+white_pieces = ['p','r','n','k','q','b']
+black_pieces = ['P','R','N','K','Q','B']
 piece_is_held = False
 pieces_are_moved = False
 clear_attached_pieces = False
@@ -83,22 +85,32 @@ piece_prev_pos = [0,0]
 recent_move = [0,0]
 
 def move_piece(events , board:Board , border:Border , mousemotionconst:int , screen): # optimized i guess
-    global piece_is_held,offsetx,offsety,attached_pieces,clear_attached_pieces,recent_move,pieces_are_moved
+    global piece_is_held,offsetx,offsety,attached_pieces,clear_attached_pieces,recent_move,pieces_are_moved,whitesturn
     mousepos = pygame.mouse.get_pos()
     pressed = pygame.mouse.get_pressed()
     if pieces_are_moved:
         pygame.draw.rect(screen,l_colors.clicked_location_box,(piece_prev_pos[0],piece_prev_pos[1],75,75))
-    if ((not piece_is_held and pieces_are_moved) and not pressed[0]) and recent_move != piece_prev_pos:
+    if (not piece_is_held and pieces_are_moved) and recent_move != piece_prev_pos:
         pygame.draw.rect(screen,l_colors.dropped_location_box,(recent_move[0],recent_move[1],75,75))
     for e in events:
         for p in pieces:
             if((mousepos[0] > p.position[0] and mousepos[0] < (p.position[0]+board.isps)) and (mousepos[1] > p.position[1] and mousepos[1] < (p.position[1]+board.isps))):
-                if(pressed[0]):
+                if(pressed[0]): # append if white and white's turn
                     if(len(attached_pieces) != 0):
                         if(p not in attached_pieces):
                             attached_pieces.append(p)
                     else:
-                        attached_pieces.append(p)
+                        if(p.piece in white_pieces and whitesturn):
+                            attached_pieces.append(p)
+                if(pressed[0]): # append if black and black's turn
+                    if(len(attached_pieces) != 0):
+                        if(p not in attached_pieces):
+                            attached_pieces.append(p)
+                    else:
+                        if(p.piece in black_pieces and not whitesturn):
+                            attached_pieces.append(p)
+
+                if(pressed[0]):
                     for piece in attached_pieces:
                         if(piece != attached_pieces[0]):
                             if(piece.position[0] == border.position[0] and piece.position[1] == border.position[1]):
@@ -106,23 +118,24 @@ def move_piece(events , board:Board , border:Border , mousemotionconst:int , scr
                             else:
                                 clear_attached_pieces = True
 
-                    if clear_attached_pieces and len(attached_pieces) != 0:
+                    if clear_attached_pieces and len(attached_pieces) != 0: # clear if there are no pieces at border location
                         attached_pieces = [attached_pieces[0]]
                         clear_attached_pieces = False
 
-                if pressed[0] and not piece_is_held:
+                if (pressed[0] and not piece_is_held) and len(attached_pieces) != 0:
                     piece_is_held = True
                     offsetx = (mousepos[0]-attached_pieces[0].position[0]) # set mouse offset for holding the piece
                     offsety = (mousepos[1]-attached_pieces[0].position[1])
                     piece_prev_pos[0] = attached_pieces[0].position[0]
                     piece_prev_pos[1] = attached_pieces[0].position[1]
-                if not pressed[0] and piece_is_held:      
+                if (not pressed[0] and piece_is_held) and len(attached_pieces) != 0:    
                         piece_is_held = False
                         if len(attached_pieces) < 2: # check if there are extra pieces attached / there is a piece on desired landing location
                             attached_pieces[0].position[0] = border.position[0]
                             attached_pieces[0].position[1] = border.position[1] # works lmao
                             recent_move[0] = border.position[0]
                             recent_move[1] = border.position[1]
+                            whitesturn = not whitesturn # toggle turn here
                             pieces_are_moved = True
                         else:
                             attached_pieces[0].position[0] = piece_prev_pos[0]
@@ -131,6 +144,7 @@ def move_piece(events , board:Board , border:Border , mousemotionconst:int , scr
                             l_audio.play(4,0)
                         attached_pieces = []
                         offsetx,offsety = 0,0
+
         if e.type == mousemotionconst and piece_is_held:
             attached_pieces[0].position[0] = mousepos[0]-offsetx
             attached_pieces[0].position[1] = mousepos[1]-offsety

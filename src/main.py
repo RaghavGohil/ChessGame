@@ -31,10 +31,6 @@ try:
     pygame.display.set_icon(pygame.image.load(os.path.join(l_settings.base_path,l_settings.game_icon_path)))
 except:
     raise Exception("Unable to load game icon.")
-try:
-    initialized_font = pygame.font.SysFont(l_font.font_name_path , l_font.font_size)
-except:
-    raise Exception("Unable to load font.")
 
 clock = pygame.time.Clock()
 
@@ -64,7 +60,7 @@ def main():
     l_piece.move_piece(events,board,border,MOUSEMOTION,screen)
     border.display(screen,board)
     l_piece.display_pieces(screen)
-    l_in_game_locator.render_current_in_game_location(screen,initialized_font,board,l_colors.current_location_font_bounding_box_color,l_colors.current_location_font_color,winw,winh,l_font.font_antialiasing)
+    l_in_game_locator.render_current_in_game_location(screen,board,l_colors.current_location_font_bounding_box_color,l_colors.current_location_font_color,winw,winh)
 
 # initialize variables and run the game loop:
 
