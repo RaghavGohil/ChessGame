@@ -85,7 +85,7 @@ attached_pieces = []
 piece_prev_pos = [0,0]
 recent_move = [0,0]
 
-def process_piece_events(events , board:Board , border:Border , mousemotionconst:int , screen:pygame.Surface , piece_container:Any , move_container:Any , in_game_locator:Any): # optimized i guess
+def process_piece_events(events , board:Board , border:Border , mousemotionconst:int , screen:pygame.Surface , piece_container:Any , move_container:Any , in_game_locator:Any): # not optimized
     global piece_is_held,offsetx,offsety,attached_pieces,clear_attached_pieces,recent_move,pieces_are_moved,whitesturn
     mousepos = pygame.mouse.get_pos()
     pressed = pygame.mouse.get_pressed()
@@ -93,8 +93,7 @@ def process_piece_events(events , board:Board , border:Border , mousemotionconst
         pygame.draw.rect(screen,l_colors.clicked_location_box,(piece_prev_pos[0],piece_prev_pos[1],75,75))
     if (not piece_is_held and pieces_are_moved) and recent_move != piece_prev_pos:
         pygame.draw.rect(screen,l_colors.dropped_location_box,(recent_move[0],recent_move[1],75,75))
-    for e in events:
-        for p in pieces:
+    for p in pieces:
             if((mousepos[0] > p.position[0] and mousepos[0] < (p.position[0]+board.isps)) and (mousepos[1] > p.position[1] and mousepos[1] < (p.position[1]+board.isps))):
                 if(pressed[0]): # append if white and white's turn
                     if(len(attached_pieces) != 0):
@@ -183,7 +182,7 @@ def process_piece_events(events , board:Board , border:Border , mousemotionconst
                             l_audio.play(4,0)
                         attached_pieces = []
                         offsetx,offsety = 0,0
-
+    for e in events:
         if e.type == mousemotionconst and piece_is_held:
             attached_pieces[0].position[0] = mousepos[0]-offsetx
             attached_pieces[0].position[1] = mousepos[1]-offsety

@@ -23,10 +23,11 @@ now = 0
 winw = 1000
 winh = 600
 winsize = [winw, winh]
+screen_flags = DOUBLEBUF
 if not l_settings.screen_is_resizable:
     screen = pygame.display.set_mode(winsize)
 else:
-    screen = pygame.display.set_mode(winsize,pygame.RESIZABLE)
+    screen = pygame.display.set_mode(winsize,screen_flags,pygame.RESIZABLE)
 pygame.display.set_caption(l_settings.game_name)
 try:
     pygame.display.set_icon(pygame.image.load(os.path.join(l_settings.base_path,l_settings.game_icon_path)))
@@ -70,8 +71,8 @@ def main():
 
 init()
 
-while True:
-
+while 1:
+    
     update_window_width_and_height()
 
     now = pygame.time.get_ticks()

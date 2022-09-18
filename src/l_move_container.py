@@ -30,7 +30,6 @@ class MoveContainer:
                     xcount = 0
                     ycount += 1
                 if (move+1) != len(self.moves): # make text darker
-                    print(len(self.moves))
                     l_font.render_text(screen,self.individual_move_text_size,int(self.start_offset[0]+xcount*self.individual_text_block_size[0]),int(self.start_offset[1]+ycount*self.individual_text_block_size[1]),self.moves[move],l_colors.move_container_display_text_color_dimmed)
                 else: # make text lighter
                     l_font.render_text(screen,self.individual_move_text_size,int(self.start_offset[0]+xcount*self.individual_text_block_size[0]),int(self.start_offset[1]+ycount*self.individual_text_block_size[1]),self.moves[move],l_colors.move_container_display_text_color)
