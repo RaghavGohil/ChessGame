@@ -85,7 +85,7 @@ attached_pieces = []
 piece_prev_pos = [0,0]
 recent_move = [0,0]
 
-def process_piece_events(events , board:Board , border:Border , mousemotionconst:int , screen:pygame.Surface , piece_container:Any): # optimized i guess
+def process_piece_events(events , board:Board , border:Border , mousemotionconst:int , screen:pygame.Surface , piece_container:Any , move_container:Any , in_game_locator:Any): # optimized i guess
     global piece_is_held,offsetx,offsety,attached_pieces,clear_attached_pieces,recent_move,pieces_are_moved,whitesturn
     mousepos = pygame.mouse.get_pos()
     pressed = pygame.mouse.get_pressed()
@@ -131,17 +131,19 @@ def process_piece_events(events , board:Board , border:Border , mousemotionconst
                     piece_prev_pos[1] = attached_pieces[0].position[1]
                 if (not pressed[0] and piece_is_held) and len(attached_pieces) != 0:    
                         piece_is_held = False
-                        if len(attached_pieces) < 2: # check if there are extra pieces attached / there is a piece on desired landing location
+                        if len(attached_pieces) < 2: # check if there are extra pieces attached / there is a piece on desired landing location # piece moved
                             attached_pieces[0].position[0] = border.position[0]
                             attached_pieces[0].position[1] = border.position[1]  # works lmao
                             recent_move[0] = border.position[0]
                             recent_move[1] = border.position[1]
                             if attached_pieces[0].position != piece_prev_pos:
                                 whitesturn = not whitesturn # toggle turn here
+                                move_container.add_move(attached_pieces[0].piece+':'+in_game_locator.ds)
                             pieces_are_moved = True
                         elif len(attached_pieces) == 2: # white eats piece!
-                            if(attached_pieces[0].piece in white_pieces and whitesturn) and attached_pieces[1].piece in black_pieces:
+                            if(attached_pieces[0].piece in white_pieces and whitesturn) and attached_pieces[1].piece in black_pieces: # piece moved
                                 l_audio.play(5,0)
+                                move_container.add_move(attached_pieces[0].piece+':'+in_game_locator.ds)
                                 piece_container.add_piece(attached_pieces[1])
                                 pieces.remove(attached_pieces[1])
                                 del attached_pieces[1]
@@ -156,8 +158,9 @@ def process_piece_events(events , board:Board , border:Border , mousemotionconst
                                 attached_pieces[0].position[0] = piece_prev_pos[0]
                                 attached_pieces[0].position[1] = piece_prev_pos[1] # prevpos
 
-                            if(attached_pieces[0].piece in black_pieces and not whitesturn) and attached_pieces[1].piece in white_pieces:
+                            if(attached_pieces[0].piece in black_pieces and not whitesturn) and attached_pieces[1].piece in white_pieces: # piece moved
                                 l_audio.play(5,0)
+                                move_container.add_move(attached_pieces[0].piece+':'+in_game_locator.ds)
                                 piece_container.add_piece(attached_pieces[1])
                                 pieces.remove(attached_pieces[1])
                                 del attached_pieces[1]

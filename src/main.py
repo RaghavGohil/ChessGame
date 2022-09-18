@@ -12,6 +12,7 @@ import l_font
 import l_bitboards
 import l_audio
 import l_piece_container
+import l_move_container
 
 # initializing pygame
 pygame.init()
@@ -46,21 +47,24 @@ def update_window_width_and_height():
         winsize[1] = screen.get_height()
 
 def init():
-    global board,border,piece_container
+    global board,border,piece_container,move_container,in_game_locator
 
     l_audio.play(0,0) #play start sound
     board = l_board.Board(l_settings.base_path,(winsize[1],winsize[1]))
     border = l_border.Border(l_settings.base_path)
+    in_game_locator = l_in_game_locator.InGameLocator()
     piece_container = l_piece_container.PieceContainer([board.ps[0] + 20,20],[winsize[0]-(board.ps[0]+20)-60,193])
+    move_container = l_move_container.MoveContainer([piece_container.position[0],piece_container.position[1]+piece_container.size[1]+20],piece_container.size)
     l_piece.initialize_pieces(board)
 
 def main():
     board.display(screen)
     piece_container.display(screen)
-    l_piece.process_piece_events(events,board,border,MOUSEMOTION,screen,piece_container)
+    move_container.display(screen)
+    l_piece.process_piece_events(events,board,border,MOUSEMOTION,screen,piece_container,move_container,in_game_locator)
     border.display(screen,board)
     l_piece.display_pieces(screen)
-    l_in_game_locator.render_current_in_game_location(screen,board,l_colors.current_location_font_bounding_box_color,l_colors.current_location_font_color,winw,winh)
+    in_game_locator.render_current_in_game_location(screen,board,l_colors.current_location_font_bounding_box_color,l_colors.current_location_font_color,winw,winh)
 
 # initialize variables and run the game loop:
 
