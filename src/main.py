@@ -13,6 +13,7 @@ import l_bitboards
 import l_audio
 import l_piece_container
 import l_move_container
+import l_reset
 
 # initializing pygame
 pygame.init()
@@ -36,6 +37,9 @@ except:
 
 clock = pygame.time.Clock()
 
+# game state:
+game_is_running = True
+
 def quit_game():
     pygame.quit()
     l_font.pquit()
@@ -48,14 +52,15 @@ def update_window_width_and_height():
         winsize[1] = screen.get_height()
 
 def init():
-    global board,border,piece_container,move_container,in_game_locator
+    global board,border,piece_container,move_container,in_game_locator,reset
 
     l_audio.play(0,0) #play start sound
     board = l_board.Board(l_settings.base_path,(winsize[1],winsize[1]))
     border = l_border.Border(l_settings.base_path)
-    in_game_locator = l_in_game_locator.InGameLocator()
+    in_game_locator = l_in_game_locator.InGameLocator([winw-40,winh-35],[40,35])
     piece_container = l_piece_container.PieceContainer([board.ps[0] + 20,20],[winsize[0]-(board.ps[0]+20)-60,193])
     move_container = l_move_container.MoveContainer([piece_container.position[0],piece_container.position[1]+piece_container.size[1]+20],piece_container.size)
+    reset = l_reset.Reset([in_game_locator.position[0]-90,in_game_locator.position[1]],[80,35])
     l_piece.initialize_pieces(board)
 
 def main():
@@ -67,11 +72,31 @@ def main():
     l_piece.display_pieces(screen)
     in_game_locator.render_current_in_game_location(screen,board,l_colors.current_location_font_bounding_box_color,l_colors.current_location_font_color,winw,winh)
 
+    reset.display(screen)
+    reset.handle_reset(events)
+    if(reset.isresetting):
+        reinit()
+        reset.isresetting = False
+
+def reinit():
+    global board,border,piece_container,move_container,in_game_locator,reset,game_is_running
+    game_is_running = False
+    del board
+    del border
+    del piece_container
+    del move_container
+    del in_game_locator
+    l_piece.reinit_processes()
+    init() # reinitialize everything
+    game_is_running = True
+
 # initialize variables and run the game loop:
 
 init()
 
-while 1:
+while game_is_running:
+
+    print(clock.get_fps())
 
     update_window_width_and_height()
 

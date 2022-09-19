@@ -85,7 +85,20 @@ attached_pieces = []
 piece_prev_pos = [0,0]
 recent_move = [0,0]
 
-def process_piece_events(events , board:Board , border:Border , mousemotionconst:int , screen:pygame.Surface , piece_container:Any , move_container:Any , in_game_locator:Any): # not optimized
+def reinit_processes():
+    global whitesturn,white_pieces,black_pieces,piece_is_held,pieces_are_moved,clear_attached_pieces,offsetx,offsety,attached_pieces,piece_prev_pos,recent_move
+    whitesturn = True
+    white_pieces = ['p','r','n','k','q','b']
+    black_pieces = ['P','R','N','K','Q','B']
+    piece_is_held = False
+    pieces_are_moved = False
+    clear_attached_pieces = False
+    offsetx,offsety = 0,0
+    attached_pieces = []
+    piece_prev_pos = [0,0]
+    recent_move = [0,0]
+
+def process_piece_events(events:Any , board:Board , border:Border , mousemotionconst:int , screen:pygame.Surface , piece_container:Any , move_container:Any , in_game_locator:Any): # not optimized
     global piece_is_held,offsetx,offsety,attached_pieces,clear_attached_pieces,recent_move,pieces_are_moved,whitesturn
     mousepos = pygame.mouse.get_pos()
     pressed = pygame.mouse.get_pressed()
@@ -137,12 +150,12 @@ def process_piece_events(events , board:Board , border:Border , mousemotionconst
                             recent_move[1] = border.position[1]
                             if attached_pieces[0].position != piece_prev_pos:
                                 whitesturn = not whitesturn # toggle turn here
-                                move_container.add_move(attached_pieces[0].piece+':'+in_game_locator.ds)
+                                move_container.add_move(attached_pieces[0].piece+':'+in_game_locator.header_text)
                             pieces_are_moved = True
                         elif len(attached_pieces) == 2: # white eats piece!
                             if(attached_pieces[0].piece in white_pieces and whitesturn) and attached_pieces[1].piece in black_pieces: # piece moved
                                 l_audio.play(5,0)
-                                move_container.add_move(attached_pieces[0].piece+':'+in_game_locator.ds)
+                                move_container.add_move(attached_pieces[0].piece+':'+in_game_locator.header_text)
                                 piece_container.add_piece(attached_pieces[1])
                                 pieces.remove(attached_pieces[1])
                                 del attached_pieces[1]
@@ -159,7 +172,7 @@ def process_piece_events(events , board:Board , border:Border , mousemotionconst
 
                             if(attached_pieces[0].piece in black_pieces and not whitesturn) and attached_pieces[1].piece in white_pieces: # piece moved
                                 l_audio.play(5,0)
-                                move_container.add_move(attached_pieces[0].piece+':'+in_game_locator.ds)
+                                move_container.add_move(attached_pieces[0].piece+':'+in_game_locator.header_text)
                                 piece_container.add_piece(attached_pieces[1])
                                 pieces.remove(attached_pieces[1])
                                 del attached_pieces[1]
