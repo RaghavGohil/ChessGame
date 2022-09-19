@@ -72,7 +72,7 @@ def main():
 init()
 
 while 1:
-    
+
     update_window_width_and_height()
 
     now = pygame.time.get_ticks()
