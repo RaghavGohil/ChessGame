@@ -9,6 +9,8 @@ class PieceContainer:
         self.position = position
         self.size = size
         self.header_text = 'Captured Pieces:'
+        self.header_text_font_size = 30
+        self.header_font = pygame.font.SysFont(l_font.font_name_path,self.header_text_font_size)
         self.header_x = (self.position[0]+5)
         self.header_y = (self.position[1]+5)
         self.start_offset = [self.position[0],self.position[1]+30] # offset for placing pieces
@@ -19,7 +21,7 @@ class PieceContainer:
         
     def display(self,screen:pygame.Surface):
         pygame.draw.rect(screen,l_colors.piece_container_color,(self.position[0],self.position[1],self.size[0],self.size[1]))
-        l_font.render_text(screen,30,self.header_x,self.header_y,self.header_text,l_colors.piece_container_display_text_color)
+        l_font.render_text_load_already(screen,self.header_font,self.header_x,self.header_y,self.header_text,l_colors.piece_container_display_text_color)
         xcount = 0
         ycount = 0
         for cp in range(len(self.captured_pieces)):
