@@ -74,6 +74,7 @@ def initialize_pieces(board:Board): # optimized
             elif(board.char_board[y+(x*8)] == 'k'):
                 pieces.append(Piece([y*board.isps,x*board.isps],l_settings.base_path,'k'))
 
+################
 whitesturn = True
 white_pieces = ['p','r','n','k','q','b']
 black_pieces = ['P','R','N','K','Q','B']
@@ -84,6 +85,7 @@ offsetx,offsety = 0,0
 attached_pieces = []
 piece_prev_pos = [0,0]
 recent_move = [0,0]
+################
 
 def reinit_processes():
     global whitesturn,white_pieces,black_pieces,piece_is_held,pieces_are_moved,clear_attached_pieces,offsetx,offsety,attached_pieces,piece_prev_pos,recent_move
@@ -150,6 +152,7 @@ def process_piece_events(events:Any , board:Board , border:Border , mousemotionc
                             recent_move[1] = border.position[1]
                             if attached_pieces[0].position != piece_prev_pos:
                                 whitesturn = not whitesturn # toggle turn here
+                                board.update_boards(pieces)
                                 move_container.add_move(attached_pieces[0].piece+':'+in_game_locator.header_text)
                             pieces_are_moved = True
                         elif len(attached_pieces) == 2: # white eats piece!
@@ -158,6 +161,7 @@ def process_piece_events(events:Any , board:Board , border:Border , mousemotionc
                                 move_container.add_move(attached_pieces[0].piece+':'+in_game_locator.header_text)
                                 piece_container.add_piece(attached_pieces[1])
                                 pieces.remove(attached_pieces[1])
+                                board.update_boards(pieces)
                                 del attached_pieces[1]
                                 attached_pieces[0].position[0] = border.position[0]
                                 attached_pieces[0].position[1] = border.position[1]
@@ -175,6 +179,7 @@ def process_piece_events(events:Any , board:Board , border:Border , mousemotionc
                                 move_container.add_move(attached_pieces[0].piece+':'+in_game_locator.header_text)
                                 piece_container.add_piece(attached_pieces[1])
                                 pieces.remove(attached_pieces[1])
+                                board.update_boards(pieces)
                                 del attached_pieces[1]
                                 attached_pieces[0].position[0] = border.position[0]
                                 attached_pieces[0].position[1] = border.position[1]
